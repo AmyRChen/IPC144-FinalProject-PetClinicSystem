@@ -1,0 +1,133 @@
+// Add an appointment record to the appointment array
+void addAppointment(struct Appointment appoints[], int maxAppoints, struct Patient patients[], int maxPatients)
+{
+    //先確認有沒有空appoint, 有沒有這個病患, 時間有沒有重疊, 時間有沒有在營業時間內
+    int i, j;
+    int exitFlag = 0, matchPatient = 0, timeClash = 0, invalidTime = 0;  //flag們
+    int matchAppoint = 0;   //check
+    struct Appointment optAppoint = { 0 };
+
+    for (i = 0; !exitFlag && i < maxAppoints; i++)
+    {
+        if (appoints[i].patientNumber < 1)  //(1.)因為我們是搜尋appointment所以不能合併QQ
+        {
+            //(2.)Validation of the entered patient number
+            printf("Patient Number: "); //function
+            optAppoint.patientNumber = inputIntPositive();
+            matchPatient = findPatientIndexByPatientNum(optAppoint.patientNumber, 
+                                                        patients, maxPatients);
+            if (matchPatient == -1)
+            {
+                printf("ERROR: Patient record not found!\n\n");
+                exitFlag = 1;
+            }
+            else
+            {
+                do {    //(3.)time clash
+                    timeClash = 0;
+                    optAppoint.date = inputAppointDate();
+                    do {    //(4.)operation time
+                        invalidTime = 0;
+                        printf("Hour (%d-%d)  : ", FIRST_HOUR, LAST_HOUR);
+                        optAppoint.time.hour = inputIntRange(0, 23);
+                        printf("Minute (%d-%d): ", FIRST_MIN, LAST_MIN);
+                        optAppoint.time.min = inputIntRange(0, 59);
+                        // confirm time!! 我有做一個function在core不知道位置對不對 也不知道有沒有需要
+                        if ((optAppoint.time.hour < START_HOURS || optAppoint.time.hour > END_HOURS) || 
+                            (optAppoint.time.min % APPOINT_INTERVAL != 0) || 
+                            (optAppoint.time.hour == END_HOURS && optAppoint.time.min > 0))
+                        {
+                            printf("ERROR: Time must be between %d:00 and %d:00 in %d minute intervals.\n\n",
+                                    START_HOURS, END_HOURS, APPOINT_INTERVAL);
+                            invalidTime = 1;
+                        }
+                    } while (invalidTime);
+
+                    //Check the same DATE! + TIME 
+                    for (j = 0; !timeClash && j < maxAppoints; j++)
+                    {
+                        matchAppoint = searchSameDateAppoint(&appoints[j], 
+                                                             &optAppoint.date, maxAppoints);
+                        if (matchAppoint && 
+                            optAppoint.time.hour == appoints[j].time.hour &&
+                            optAppoint.time.min == appoints[j].time.min)
+                        {
+                            putchar('\n');
+                            printf("ERROR: Appointment timeslot is not available!\n\n");
+                            timeClash = 1;  //有找到相同時間的就跳出 跳到輸入年月份
+                        }
+                    }
+                    
+                } while (timeClash);
+                exitFlag = 1;
+            }
+        }
+    }
+    if (matchPatient != -1 && exitFlag)   //successfully add an appointment
+    {
+        appoints[i] = optAppoint;
+        putchar('\n');
+        printf("*** Appointment scheduled! ***\n\n");
+    }
+    else if (!exitFlag)  //over 50 (no more appointment accept)
+    {
+        printf("ERROR: Appointment listing is FULL!\n\n");
+    }
+}
+
+
+///REMOVE///
+// Remove an appointment record from the appointment array
+void removeAppointment(struct Appointment appoints[], int maxAppoints, struct Patient patients[], int maxPatients)
+{
+    int i, rmOpt;
+    int patientIndex = 0, matchAppoint = 0, exitFlag = 0;
+
+    struct Appointment rmAppoint = { 0 };
+    struct Appointment empty = { 0 };   //safe empty state
+
+    //printf("Patient Number: ");
+    //rmAppoint.patientNumber = inputIntPositive();
+    //// Make sure the patient number is on the paitent list by cheching its index
+    //patientIndex = findPatientIndexByPatientNum(rmAppoint.patientNumber, patients, maxPatients);
+    patientIndex = inputPatientValidation(&rmAppoint.patientNumber, patients, maxPatients);
+    if (patientIndex == -1)
+    {
+        printf("ERROR: Patient record not found!\n\n");
+    }
+    else
+    {
+        rmAppoint.date = inputAppointDate();    //input the date that want to remove
+        putchar('\n');
+        displayPatientData(&patients[patientIndex], FMT_FORM);
+
+        printf("Are you sure you want to remove this appointment (y,n): ");
+        rmOpt = inputCharOption("yn");
+        if (rmOpt == 'y')
+        {
+            for (i = 0; !exitFlag && i < maxAppoints; i++)
+            {
+                matchAppoint = searchSameDateAppoint(&appoints[i], 
+                                                     &rmAppoint.date, maxAppoints);
+                if (matchAppoint && 
+                    rmAppoint.patientNumber == appoints[i].patientNumber)
+                {
+                    appoints[i] = empty;
+                    putchar('\n');
+                    printf("Appointment record has been removed!\n\n");
+                    exitFlag = 1;   //exit the loop once it found the appointment
+                }
+            }
+            if (!exitFlag)
+            {
+                printf("ERROR: Appointment record not found!\n\n");
+            }
+        }
+        else
+        {
+            putchar('\n');
+            printf("Operation aborted.\n\n");
+        }
+    }
+}
+

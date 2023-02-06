@@ -1,0 +1,117 @@
+/*
+*****************************************************************************
+                        Assignment 1 - Milestone 3
+Full Name  : Ping-Ju, Chen
+Student ID#: 151043205
+Email      : pchen72@myseneca.ca
+Section    : NAA
+
+Authenticity Declaration:
+I declare this submission is the result of my own work and has not been
+shared with any other student or 3rd party content provider. This submitted
+piece of work is entirely of my own creation.
+*****************************************************************************
+*/
+
+1.
+(a.) 
+The first function I've created is "sortAppointsByDateTime". The prototype of this function is:
+
+void sortAppointsByDateTime(struct Appointment appoints[], int itemCount);
+
+This function helps the program sort the appointments by date and time in the ascending order. 
+At first, the program imports the source file that stores appointment data, but the data are not 
+sorted by date and time. Hence, considering the readability and user-friendly interface, I've 
+created this function to sort the appointments in the expected order. In addition, the user 
+might need to add or remove the appointments, so the "sortAppointsByDateTime" function should 
+perform each time just before displaying the information. The program can achieve the purpose 
+in one line by calling this function. This function is convenient to call. It also makes the 
+display of the appointment records more readable and logical.
+
+(b.)
+The function "inputAppointDate", the prototype is as below:
+
+struct Date inputAppointDate(void);
+
+The function "inputAppointDate" has two purposes. Firstly, getting the user input for the 
+appointment date. Secondly, prompt the correct range of days for the user. The number of days 
+in a month could be different; some months include 30 days while the others have 28 or 31 days. 
+This function will prompt the message with the correct day input range calculated based on the 
+year and month the user just input. Moreover, this function has a logic that considers the leap 
+year and shows the corresponding days in February, which design is user-friendly and attentively. 
+The value of this function is to reduce the redundant coding. The program might need the user to 
+input the date frequently. Once any caller function needs the date from the user, this function 
+is a concise way to get the data. Additionally, the "inputAppointDate" function store the user 
+input in the structure "Date" and returns it so that the caller function can apply the data easily.
+
+(c.)
+The last function I would like to describe is "searchSameDateAppoint". 
+The prototype of this function is:
+
+int searchSameDateAppoint(struct Appointment* appoints, 
+                          struct Date* optDate, int maxAppoints);
+
+This function checks whether there's an appointment already existing. The function returns "1" once 
+the matching time appointments are detected. In this veterinary clinic system, the program displays 
+the appointment records that share the same date or checks for a time clash. Since only one patient 
+is available for a time slot and we have a lot of time conditions to compare (year, month, day, etc.), 
+this function could simplify the long condition expression to avoid double booking. I noticed that 
+most caller functions need to check for the same "date" with the additional conditions, like a patient 
+number or the appointment "time". To reduce the redundancy, I create this function to make the code 
+clear and readable. 
+
+---
+2.
+Eventually, I used 42 lines to implement the "addAppointment" function. I believe I saved approximately 
+60 lines by applying pattern recognition and the use of functions. 
+In this function, we need to consider many factors and different scenarios. Firstly, since there's a 
+maximum number of appointments, we have to check whether a new booking is available. I use the 
+"findAvailableAppointment" function to find an index in the "appoints" array for a new appointment to 
+be added. Secondly, the entered patient number must be validated as a patient in the patient array. 
+For this part, I use the "inputPatientValidation" function to test the entered patient number. After 
+this, we should validate the date and the time for a new appointment to ensure they're in the operation 
+hour without a time clash. For the date and the time selection, I use the "inputAppointDate" function 
+to get the entered date and apply the "inputAppointTime" to get the time. Both of these functions 
+provide the valid date and the time which satisfy the operation hour. Finally, the program should 
+check if the chosen date and time will cause a time clash with the existing appointments. I use the 
+"searchSameDateAppoint" function to validate the entered date. Since the matching time validation only 
+needs to be performed in this function, I use an if statement to connect all the conditions, then 
+filter the scenarios that should prompt an error message. In my opinion, we could simplify the 
+"addAppointment" function by creating many helper functions. However, we have to consider the 
+reusability and adhere to the structured design principles as well, so I tried to find a balance 
+between these two considerations.
+
+---
+3.
+As the end of my first semester has come, I usually write down a schedule for the following week. 
+On Monday, I spent most of my time reading the instruction of ms3 thoroughly. During this time, I 
+tried to understand the logic of the functions and review the sample output. I used to note down 
+all the key points I've read and design a plan to implement the milestone. After this, I copied 
+the work I've done in ms2 to the new sources files and then started to create the new structures. 
+On Tuesday, I was working on the "viewAllAppointments" function. During the implementation of 
+this function, I first noticed that one patient could have more than one appointment. So the 
+patient and appointment data don't share the corresponding indexing. For example, the first 
+patient in the "patientData.txt" is Shaggy Yanson. This patient has the appointment records in 
+the index 9 and 14 in the "appointmentData.txt" source file. To solve this problem, I use the 
+"findPatientIndexByPatientNum" function to get the corresponding index first, then display the 
+records. I believe I spent too much time figuring out how to sort the appointments correctly. 
+Thus, I adjusted the code that we had finished last week based on the feedback, and then I moved 
+on to the next function. 
+On Wednesday, I finished the "viewAppointmentSchedule" function. This function shares similar 
+issues as the first function. I've solved the problem I mentioned earlier, but the sorting
+problem was unsolved. I thought I was too slow and worried about the due time, and finally, 
+a lot of progress had done on Thursday! The next day, I found I should apply bubble sort to 
+solve the sorting problem. I spent a while creating a function to implement the bubble sort 
+then I finished the first and second functions. Following this, I started to define the 
+"addAppointment" function. I spent most of my time on this function since it has four factors 
+to consider and has different scenarios. I was struggling with whether I should create new 
+helper functions to simplify the process and organize those new functions with a proper category. 
+On Friday night, I finished the "addAppointment" and "removeAppointment" functions with lots of 
+improvements needed. I spent a whole Saturday creating the functions that I believe are necessary 
+to upgrade my program. My purpose is to increase the readability and make the code easy to maintain 
+in the future. Finally, I use the helper function to reduce the redundant coding by recognizing 
+the pattern among these four functions. On Sunday, I spent my day writing the reflection and 
+reviewing the coding part again. 
+It's exciting to build a system step by step and feel a sense of accomplishment at the end. 
+I believe I have learned a lot from this assignment. Not only enhance our coding logic,  
+time management, the structure organization, but also the mindset to face a bigger project!

@@ -1,0 +1,76 @@
+1. From the core functions library, what function was the most challenging to define and clearly describe 
+the challenge(s) including how you managed to overcome them in the context of the methods used in 
+preparing your logic, debugging, and testing.
+
+The most challenging function for me is the "inputCString" function. The two parts that I spent most of the 
+time on were specifying the array size of the c-string and how to return a c-string through the first argument 
+parameter. To prepare the logic, I read the instruction carefully. Then I reviewed the sample output and a1ms1.c 
+file to fully understand the function. Since I should return the valid c-string via parameter. At first, 
+I tried to store the input in the parameter directly like this:
+
+scanf("%[^\n]", cString);
+
+I usually set breakpoints and use the debugger to check how the array changes after finishing a function. 
+A few minutes later, I found it cause an error because some test cases are longer than the size 7. Additionally, 
+the output also didn't show the input c-string properly. I analyzed the reasons and adjusted my plan. So I 
+created a local scope array "string". I want to store the input into the "string" first, do the validation, 
+and assign it back to "cString" one character at a time if it's valid. Following this, I noticed that the 
+size of the "string" became a problem. I doubt that if I have to specify a number directly. I spent some 
+time improving the way I code. I tried all the logical methods I got, but it always led to an error. I also 
+discussed the issue with my classmates! Most of them faced the same situation as I. A few hours later, I 
+decided to specify the size directly. Firstly, I improved it like:
+
+scanf("%1000[^\n]", input);
+clearInputBuffer();
+
+Secondly, I adjusted to return the value by a for loop:
+
+for (i = 0; input[i] != '\0'; i++)
+    {
+        cString[i] = input[i];
+    }
+
+Finally, I test the function with all the possible values; the shorter, longer, or equal length string several times. 
+It helps me make sure that I have included all the possible situations. To conclude, I have to manage the size, return 
+it correctly, and be familiar with c-sting!
+
+-----
+2.It is good practice to initialize variables to a "safe empty state". With respect to variable initialization, 
+what is the difference between assigning 0 and NULL? When do you use one over the other and why?
+
+The difference between assigning 0 and NULL is while 0 is an integral value, NULL is a null pointer constant macro 
+defined in the header files (library). We could look for the definition of NULL it shows :
+
+#define NULL (void *) 0;
+
+Firstly, unlike a pointer, 0 is a value that does not represent a memory location. The NULL constant is used as a 
+pointer value, which is a variable that holds a memory location. 
+Secondly, if we set a variable with a safe empty state 0: 
+
+int a = 0;
+int* p = &a;
+
+We could define a pointer to hold an address of the variable "a" that stores the value 0 in the memory. However, 
+the NULL pointer indicates that it does not point to any valid object or function, like an empty address. Hence, 
+the meaning of 0 and NULL is different. In conclusion, to initialize a variable to a safe empty state, we could 
+assign 0. But initialize the value of a pointer, we could use NULL before the address is known. Additionally, 
+NULL could apply as a function argument and return from a function when we don't want to pass the actual memory address.
+
+-----
+3. Your friend (also a beginner programmer) is having difficulty understanding how to manage the 
+"standard input buffer" (particularly when there is residual data). Your friend has read all the course 
+notes, Googled the topic, followed along with course lectures about this topic, but is still struggling with 
+this concept. Describe exactly how you would attempt to help your friend understand this topic?
+
+In my opinion, the c-string plays a crucial role in the C language because it is used in the user input frequently, 
+let alone the importance of clearing the input buffer. I'll try my best to help my friend understand the concept.
+I believe knowing "why" to clear the buffer is vital. We could understand the proposal and the timing to clear the 
+buffer by knowing why and then using it accurately. I should explain this topic step by step before we go deeper. 
+Firstly,  I'll start by explaining what the input buffer is. Since my diligent friend has already read all the study 
+materials, I would like to make sure we're on the same page in the first place. After this, I will try to explain the 
+reason for clearing the input buffer with a few examples. As we can't see what's remains in the input buffer, I'll 
+draw a picture to visualize the changes in the buffer. Finally, the most significant part is practice, and try it 
+with different examples. We can use the debugger and drawing of how the input buffer changes at the same time. Going 
+through various occasions without or with clearing the input buffer will help us scent the output of the differences 
+and recognize the pattern. It might be hard to understand a concept at first, but with the time to practice more and 
+practical experience, I believe my friend could understand this topic more and use it wisely.

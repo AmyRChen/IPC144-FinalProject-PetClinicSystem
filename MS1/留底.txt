@@ -1,0 +1,72 @@
+function2
+int inputIntPositive(void)
+{
+    int value = 0, invalid;
+
+    //code1:
+    do {
+=       invalid = 0;
+        if (value > 0)
+        {
+            invalid = 0;
+        }
+        else
+        {
+            invalid = 1;
+            scanf("%d", &value);
+            if (value <= 0)
+            {
+                clearInputBuffer();
+                printf("ERROR! Value must be > 0: ");
+            }
+        }
+    } while (invalid);
+    
+    return value;
+    
+    //code2:
+    //do {
+    //    scanf("%d", &value);
+    //    if (value > 0)
+    //    {
+    //        invalid = 0;
+    //    }
+    //    else
+    //    {
+    //        invalid = 1;
+    //        clearInputBuffer();
+    //        printf("ERROR! Value must be > 0: ");
+    //    }
+    //} while (invalid);
+    //
+    //return value;
+
+}
+
+
+//function3
+int inputIntRange(int lowerBound,
+                  int upperBound)
+{
+    int value = -5, invalid; //0本身就在範圍內因此input出不來, 除非把她assign給 out of range的數字...
+    do{
+        invalid = 0;
+        if (value >= lowerBound && value <= upperBound)
+        {
+            invalid = 0;
+        }
+        else
+        {
+            invalid = 1;
+            scanf("%d", &value);
+            if (value < lowerBound || value > upperBound)
+            {
+                clearInputBuffer();
+                printf("ERROR! Value must be between -3 and 11 inclusive: ");
+            }
+          
+        }
+    } while (invalid);
+
+    return value;
+}
